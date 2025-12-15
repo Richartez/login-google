@@ -1,32 +1,60 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
 
-// Ruta raíz → manda al login
+// --------------------------------------------------
+// HOME
+// Bienvenida para NO registrados
+// Dashboard para registrados
+// --------------------------------------------------
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : view('welcome');
+})->name('home');
 
-// Dashboard (solo usuarios autenticados)
+// --------------------------------------------------
+// GOOGLE LOGIN (OAuth)
+// ⚠️ NO llevan middleware auth
+// --------------------------------------------------
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])
+    ->name('google.redirect');
+
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
+    ->name('google.callback');
+
+// --------------------------------------------------
+// DASHBOARD (solo autenticados)
+// --------------------------------------------------
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware('auth')->name('dashboard');
 
-// Perfil de usuario (solo autenticados)
+// --------------------------------------------------
+// PERFIL DE USUARIO (solo autenticados)
+// --------------------------------------------------
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
-    Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
-// Rutas de autenticación (login, register, logout, etc.)
+// --------------------------------------------------
+// RUTAS DE AUTH DE BREEZE
+// (login, register, logout, reset, etc.)
+// --------------------------------------------------
 require __DIR__ . '/auth.php';
