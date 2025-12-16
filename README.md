@@ -1,0 +1,34 @@
+# Login con Google y Breeze – Laravel
+
+Proyecto desarrollado en **Laravel** que implementa autenticación completa usando **Laravel Breeze** y **login con Google (OAuth 2.0)**.
+
+---
+
+## Funcionalidades
+
+- ✅ Login y registro con usuario y contraseña (Laravel Breeze)
+- ✅ Login con Google usando Laravel Socialite
+- ✅ Dashboard personalizado para usuarios autenticados
+- ✅ Página de bienvenida para usuarios no registrados
+- ✅ Control de acceso mediante middleware `auth`
+
+---
+
+## Tecnologías utilizadas
+
+- Laravel 12
+- Laravel Breeze
+- Laravel Socialite
+- Tailwind CSS
+- SQLite
+- Google OAuth 2.0
+
+---
+
+## Instalación del proyecto
+
+Clonar el repositorio:
+
+```bash
+git clone https://github.com/TU_USUARIO/login-google.git
+cd login-google
